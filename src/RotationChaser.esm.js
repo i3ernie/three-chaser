@@ -21,11 +21,11 @@ const defaults = {
         let scope = this;
 
         let angle = {left:-this.options.val, right:this.options.val, in:1, out:-1, o:-this.options.val, u:this.options.val};
-        var start = obj.rotation[this.options.dir];
-        var stop = start+angle[this.options.hinge]*angle[this.options.odir];
-        var to = stop;
-        var rotation = {  z: start };
-        var target = {  z: stop };
+        let start = obj.rotation[this.options.dir];
+        let stop = start+angle[this.options.hinge]*angle[this.options.odir];
+        let to = stop;
+        let rotation = {  z: start };
+        let target = {  z: stop };
 
         let priv = {
             object3D : obj,
@@ -74,7 +74,6 @@ const defaults = {
             }
             tween.start();
         };
-
     };
 
     RotationChaser.prototype = Object.assign( Object.create( EventDispatcher.prototype ), {
