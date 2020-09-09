@@ -1,0 +1,13 @@
+{
+    "name": "three-chaser",
+    "dependencies": {
+        "three": "latest",
+        "@tweenjs/tween.js": "latest"
+    },
+    "devDependencies": {
+        "gulp": "latest",
+        "gulp-sourcemaps": "latest",
+        "three-domevents": "git+https://i3ernie@github.com/i3ernie/three-domevents.git",
+        "three-viewport": "git+https://github.com/i3ernie/three-viewport.git"
+    }
+}
