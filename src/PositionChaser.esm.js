@@ -1,73 +1,80 @@
-import TWEEN from "@tweenjs/tween.js/dist/tween.esm";
-import { Object3D } from "three/build/three.module";
+import ChaserTween from "./ChaserTween.esm.js";
+import { Object3D, EventDispatcher } from "../node_modules/three/build/three.module.js";
 
-const PositionChaser = function(obj, opt)
+const defaults = {
+    sliderange : 100,
+    time : 2000,
+    axis : "z"
+};
+
+
+const PositionChaser = function( obj, opt )
 {
-    console.assert( !(obj instanceof Object3D), "object3D must be instance of THREE.Object3D" );
-    opt = opt || {};
-    var sliderange = opt.sliderange || 20;
-    var time = 2000;
-    var axis = opt.axis || "z";
-    var start = obj.position[axis];
-    var stop = start + sliderange;
-    var to = stop;
-    var position = {  z: start };
-    var target = {  z: to };
-    var animate = false;
+    console.assert( obj instanceof Object3D, "object3D must be instance of THREE.Object3D" );
+    
+    this.options = Object.assign( {}, defaults, opt );
 
+    let scope = this;
+    
+    let start = obj.position[this.options.axis];
+    let stop = start + this.options.sliderange
 
-    var tween = new TWEEN.Tween(position).to(target, time)
-        .onStart(function(){
-            animate = true;
-        })
-        .onComplete(function(){
-            animate = false;
-            to = (to === start)? stop:start;
-            tween.to({z: to}, time);
-            CMD.Scene.trigger("tweenStopped", this);
-            CMD.Scene.trigger("tweenCompleted", start);
+    let position = {  z: start };
+    let target = {  z: stop };
 
-        })
-        .onStop(function(){
-            animate = false;
-            to = (to === start)? stop:start;
-            tween.to({z: to}, time);
-        })
-        .onUpdate(function(){
-            obj.position[axis] = position.z;
+    let priv = {
+        object3D : obj,
+    
+        start   : start,
+        stop    : stop,
+        to      : stop,
+        target  : target,
+
+        animate : false,
+        dispatcher : scope
+    };
+
+    let tween = ChaserTween.make( position, priv ).onUpdate(function(){ 
+            obj.position[scope.options.axis] = position.z;
         });
-    this.toggle = function(){
-        if ( animate ) {
+
+    this.toggle = function(){ 
+        if ( priv.animate ) {
             tween.stop();
         }
         else {
-            tween.start();
-            CMD.Scene.trigger("tweenStarted", this);
+            tween.start(); 
         }
     };
-    this.close = function( t ){
-        if( position.z === start ) return;
 
-        if ( animate ) {
+    this.close = function( t ){
+        if( position.z === priv.start ) return;
+
+        if ( priv.animate ) {
             tween.stop();
         }
         if( typeof t === "number" ){
-            tween.to({z: start}, t);
+            tween.to({z: priv.start}, t);
         }
         tween.start();
     };
-    this.open = function( t ){
-        if( position.z === stop ) return;
 
-        if ( animate ) {
+    this.open = function( t ){
+        if( position.z === priv.stop ) return;
+
+        if ( priv.animate ) {
             tween.stop();
         }
         if( typeof t === "number" ){
-            tween.to({z: stop}, t);
+            tween.to({z: priv.stop}, t);
         }
         tween.start();
     };
 };
+
+PositionChaser.prototype = Object.assign( Object.create( EventDispatcher.prototype ), {
+    constructor : PositionChaser
+});
 
 export default PositionChaser;
 export { PositionChaser };

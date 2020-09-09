@@ -1,78 +1,85 @@
 /**
  * Created by Hessberger on 18.03.2015.
  */
-import TWEEN from "@tweenjs/tween.js/dist/tween.esm";
-import { Object3D } from "three/build/three.module";
+import ChaserTween from "./ChaserTween.esm.js";
+import { Object3D, EventDispatcher } from "../node_modules/three/build/three.module.js";
 
 const defaults = {
     hinge:"left", 
     dir:"y", 
     odir:"in", 
-    val:1.57
+    val: 1.57,
+    time : 2000
 };
 
     const RotationChaser = function( obj, opt )
     {
-        console.assert( !(obj instanceof Object3D), "object3D must be instance of THREE.Object3D" );
-        var options = Object.assign( {}, defaults, opt );
-        var angle = {left:-options.val, right:options.val, in:1, out:-1, o:-options.val, u:options.val};
-        var start = obj.rotation[options.dir];
-        var stop = start+angle[options.hinge]*angle[options.odir];
-        var to = stop;
-        var rotation = {  y: start };
-        var target = {  y: stop };
-        var animate = false;
-        var time = 2000;
+        console.assert( obj instanceof Object3D, "object3D must be instance of THREE.Object3D" );
 
-        var tween = new TWEEN.Tween( rotation ).to(target, time)
-        .onStart(function(){
-            animate = true;
-        })
-        .onComplete(function(){
-            animate = false;
-            to = (to === start)? stop:start;
-            tween.to({y: to}, time);
-            CMD.Scene.trigger("tweenCompleted");
-        })
-        .onStop(function(){
-            animate = false;
-            to = (to === start)? stop:start;
-            tween.to({y: to}, time);
-        })
-        .onUpdate(function(){
-            obj.rotation[options.dir] = rotation.y;
+        this.options = Object.assign( {}, defaults, opt );
+
+        let scope = this;
+
+        let angle = {left:-this.options.val, right:this.options.val, in:1, out:-1, o:-this.options.val, u:this.options.val};
+        var start = obj.rotation[this.options.dir];
+        var stop = start+angle[this.options.hinge]*angle[this.options.odir];
+        var to = stop;
+        var rotation = {  z: start };
+        var target = {  z: stop };
+
+        let priv = {
+            object3D : obj,
+
+            start : start,
+            stop : stop,
+            to : to,
+            target : target,
+
+            animate : false,
+            dispatcher : scope.options.dispatcher || scope
+        };
+
+        let tween = ChaserTween.make( rotation, priv ).onUpdate(function(){
+            obj.rotation[scope.options.dir] = rotation.z;
         });
+
 
         this.start = function(){
             tween.start();
         };
+
         this.toggle = function(){
-            if ( animate ) tween.stop();
+            if ( priv.animate ) tween.stop();
             else tween.start();
         };
+
         this.close = function( t ){
-            if( rotation.y === start ) return;
-            if ( animate ) {
+            if( rotation.z === priv.start ) return;
+            if ( priv.animate ) {
                 tween.stop();
             }
             if( typeof t === "number" ){
-                tween.to({y: start}, t);
-            }
-            tween.start();
-        };
-        this.open = function( t ){
-            if( rotation.y === stop ) return;
-            if ( animate ) {
-                tween.stop();
-            }
-            if( typeof t === "number" ){
-                tween.to({y: stop}, t);
+                tween.to({z: priv.start}, t);
             }
             tween.start();
         };
 
+        this.open = function( t ){
+            if( rotation.z === priv.stop ) return;
+            if ( priv.animate ) {
+                tween.stop();
+            }
+            if( typeof t === "number" ){
+                tween.to({z: priv.stop}, t);
+            }
+            tween.start();
+        };
 
     };
+
+    RotationChaser.prototype = Object.assign( Object.create( EventDispatcher.prototype ), {
+        constructor : RotationChaser
+    });
     
 export default RotationChaser;
 export { RotationChaser };

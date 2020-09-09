@@ -4,6 +4,7 @@ import DomEvents from "../../node_modules/three-domevents/dist/domevents.es.js";
 import Viewport from "../../node_modules/three-viewport/dist/viewport.es.js";
 import WoodBox from "./WoodBox.js";
 import chaser from "../../src/chaser.js";
+import TWEEN from "../../node_modules/@tweenjs/tween.js/dist/tween.esm.js";
 
 var VP;
 var DEH;
@@ -18,6 +19,8 @@ function init() {
     VP.init();
     VP.start();
 
+    VP.loop.add( function(){ TWEEN.update(); });
+
     VP.camera.position.z = 400;
 
     DEH = new DomEvents( VP.camera, VP.renderer.domElement );
@@ -28,9 +31,35 @@ function init() {
     mesh1.position.set(-200,-50,0);
     VP.scene.add( mesh1 );
 
-    mesh1.onClick=function(){ console.log("click"); };
-    mesh1.addEventListener("mousedown", function( ev ){ console.log("down", ev); });
-    mesh1.addEventListener("mouseup", function( ev ){ console.log("up", ev); });
+    let posChaser = new chaser.PositionChaser( mesh1 );
+
+    mesh1.onClick = function(){ 
+        console.log("click mesh1"); 
+        posChaser.toggle();
+    };
+
+    mesh1.addEventListener("mousedown", function( ev ){ console.log("down", ev); 
+    });
+    mesh1.addEventListener("mouseup", function( ev ){ console.log("up", ev); 
+    });
+
+    let mesh2 = new WoodBox(100,100,100);
+    mesh2.name = "box_klein";
+    mesh2.position.set(-400,-50,0);
+    VP.scene.add( mesh2 );
+
+    let rotChaser = new chaser.RotationChaser( mesh2 );
+
+    mesh2.onClick = function(){ 
+        console.log("click mesh1"); 
+        rotChaser.toggle();
+    };
+
+    mesh2.addEventListener("mousedown", function( ev ){ console.log("down", ev); 
+    });
+    mesh2.addEventListener("mouseup", function( ev ){ console.log("up", ev); 
+    });
+
     
     console.log( "mesh1 has ", DEH.hasListener(mesh1, "click") );
 
