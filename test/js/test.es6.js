@@ -1,10 +1,12 @@
 
 import * as THREE from '../../node_modules/three/build/three.module.js';
-import DomEvents from "../../node_modules/three-domevents/dist/domevents.es.js";
+import {Domevents, DomeventPointer} from "../../node_modules/three-domevents/dist/domevents.pack.es.js";
 import Viewport from "../../node_modules/three-viewport/dist/viewport.es.js";
 import WoodBox from "./WoodBox.js";
-import chaser from "../../src/chaser.js";
+import chaser from "../../src/chaser.es.js";
 import TWEEN from "../../node_modules/@tweenjs/tween.js/dist/tween.esm.js";
+
+Domevents.extend( DomeventPointer.config({emulateMouse:true}) );
 
 var VP;
 var DEH;
@@ -23,13 +25,15 @@ function init() {
 
     VP.camera.position.z = 400;
 
-    DEH = new DomEvents( VP.camera, VP.renderer.domElement );
+    DEH = new Domevents( VP.camera, VP.renderer.domElement );
+
+    DEH.activate( VP.scene );
     
     
     let mesh1 = new WoodBox(100,100,100);
     mesh1.name = "box_klein";
     mesh1.position.set(-200,-50,0);
-    VP.scene.add( mesh1 );
+
 
     let posChaser = new chaser.PositionChaser( mesh1 );
 
@@ -38,15 +42,11 @@ function init() {
         posChaser.toggle();
     };
 
-    mesh1.addEventListener("mousedown", function( ev ){ console.log("down", ev); 
-    });
-    mesh1.addEventListener("mouseup", function( ev ){ console.log("up", ev); 
-    });
 
     let mesh2 = new WoodBox(100,100,100);
     mesh2.name = "box_klein";
     mesh2.position.set(-400,-50,0);
-    VP.scene.add( mesh2 );
+
 
     let rotChaser = new chaser.RotationChaser( mesh2 );
 
@@ -55,19 +55,9 @@ function init() {
         rotChaser.toggle();
     };
 
-    mesh2.addEventListener("mousedown", function( ev ){ console.log("down", ev); 
-    });
-    mesh2.addEventListener("mouseup", function( ev ){ console.log("up", ev); 
-    });
 
-    
-    console.log( "mesh1 has ", DEH.hasListener(mesh1, "click") );
 
-    DEH.activate( VP.scene );
-
-    console.log( "mesh1 has ", DEH.hasListener(mesh1, "click") );
-
-    let mesh = new WoodBox(200,200,200);
+    let mesh = new WoodBox(200, 200, 200);
     mesh.name = "box_gross";
 
     mesh.onClick = function( ev ){
@@ -92,8 +82,12 @@ function init() {
         console.log("*** box click", ev );
     };
 
+    VP.scene.add( mesh1 );
+    VP.scene.add( mesh2 );
+
     VP.scene.add( mesh );
 
     mesh.add(box);
     mesh.add(box2);
+
 }

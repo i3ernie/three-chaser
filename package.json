@@ -5,9 +5,17 @@
         "@tweenjs/tween.js": "latest"
     },
     "devDependencies": {
+        "@rollup/plugin-node-resolve": "latest",
+        "@rollup/plugin-buble": "latest",
         "gulp": "latest",
         "gulp-sourcemaps": "latest",
+        "rollup": "latest",
         "three-domevents": "git+https://i3ernie@github.com/i3ernie/three-domevents.git",
         "three-viewport": "git+https://github.com/i3ernie/three-viewport.git"
-    }
+    },
+    "files": [
+        "LICENSE",
+        "README.md",
+        "dist/chaser.pack.es.js"
+    ]
 }
