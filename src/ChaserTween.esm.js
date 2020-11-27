@@ -47,3 +47,4 @@ const ChaserTween = {
 };
 
 export default ChaserTween
+export {TWEEN, ChaserTween}

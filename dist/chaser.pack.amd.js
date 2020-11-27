@@ -1002,10 +1002,11 @@ define(['exports', 'three'], function (exports, three_module_js) { 'use strict';
         constructor : PositionChaser
     });
 
-    const chaser = { RotationChaser : RotationChaser, PositionChaser : PositionChaser };
+    const chaser = { RotationChaser : RotationChaser, PositionChaser : PositionChaser, TWEEN:exports$1 };
 
     exports.PositionChaser = PositionChaser;
     exports.RotationChaser = RotationChaser;
+    exports.TWEEN = exports$1;
     exports.default = chaser;
 
     Object.defineProperty(exports, '__esModule', { value: true });

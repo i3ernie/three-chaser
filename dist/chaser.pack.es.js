@@ -1002,8 +1002,8 @@ PositionChaser.prototype = Object.assign( Object.create( EventDispatcher.prototy
     constructor : PositionChaser
 });
 
-const chaser = { RotationChaser : RotationChaser, PositionChaser : PositionChaser };
+const chaser = { RotationChaser : RotationChaser, PositionChaser : PositionChaser, TWEEN:exports };
 
 export default chaser;
-export { PositionChaser, RotationChaser };
+export { PositionChaser, RotationChaser, exports as TWEEN };
 //# sourceMappingURL=chaser.pack.es.js.map
