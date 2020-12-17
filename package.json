@@ -1,5 +1,6 @@
 {
     "name": "three-chaser",
+    "version":"0.0.5",
     "dependencies": {
         "three": "latest",
         "@tweenjs/tween.js": "latest"
