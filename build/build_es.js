@@ -30,7 +30,7 @@ const build_chaser = function( done ){
             plugins:[
                 
                 replace({
-                    "../node_modules/three/" : "../../three/"
+                    "../node_modules/three/build/three.module.js" : "three"
                 })
             ],
             
