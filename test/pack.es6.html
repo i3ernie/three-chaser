@@ -1,6 +1,18 @@
 <hhtml>
     <head>
-            <script type="module" src="./js/test.es6.js"></script>
+        <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+    
+        <script type="importmap">
+            {
+                "imports": {
+                    "three": "../node_modules/three/build/three.module.js",
+                    "OrbitControls" : "../node_modules/three/examples/jsm/controls/OrbitControls.js",
+                    "viewport" : "../node_modules/three-viewport/dist/viewport.es.js",
+                    "domevents.pack" : "../../node_modules/three-domevents/dist/domevents.pack.es.js"
+                }
+            }
+        </script>
+            
             <style>
                 body {
 	                margin: 0;
@@ -10,6 +22,7 @@
                     display: block;
                 }
             </style>
+            <script type="module" src="./js/test.es6.js"></script>
     </head>
     <body>
         <script type="module">
