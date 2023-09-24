@@ -1,9 +1,12 @@
 {
     "name": "three-chaser",
-    "version":"0.0.5",
+    "version":"0.151.230924",
     "dependencies": {
-        "three": "latest",
+        "three": "^0.151",
         "@tweenjs/tween.js": "latest"
+    },
+    "scripts" :{
+        "build" : ""
     },
     "devDependencies": {
         "@rollup/plugin-node-resolve": "latest",
