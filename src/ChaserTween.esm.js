@@ -13,19 +13,9 @@ const ChaserTween = {
             })
 
             .onComplete(function(){ 
-                o.animate = false;
-    
-                if ( o.to === o.start ){
-                    o.to = o.stop;
-                    this._valuesStart = this._valuesStartRepeat = { z : o.start };
-                } else {
-                    o.to = o.start;
-                    this._valuesStart = this._valuesStartRepeat = { z : o.stop };
-                }
-    
-                this.to({z: o.to}, o.time); 
     
                 o.dispatcher.dispatchEvent({ type:"completed", target:o.object3D });
+                this.stop();
             })
             
             .onStop(function(){ 
